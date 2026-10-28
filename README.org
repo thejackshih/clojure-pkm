@@ -83,7 +83,7 @@
 ** Milestone 3: Malli 規格、Wiki 解析器、業務層與 Reitit 路由
 - *前後端共用規格* ：建立 ~src/common/pkm/schema.cljc~ ，宣告 ~NotePayload~ 與字串長度約束。
 - *Wiki Links 解析與佔位筆記 (Stub Notes)* ：
-  在使用者寫入尚未建立的 ~[​[目標筆記]​]~ 時，自動偵測並預先建立空內文的佔位實體，防止圖資料庫孤島引用報錯。
+  在使用者寫入尚未建立的 ~[[目標筆記]]~ 時，自動偵測並預先建立空內文的佔位實體，防止圖資料庫孤島引用報錯。
 - *Data-Driven 路由* ：使用 Reitit 宣告純資料結構路由表，引入 ~coercion/coerce-exceptions-middleware~ 自動攔截規格異常並回傳 HTTP 400。
 - *API 整合測試* ： ~test/pkm/backend/routes_test.clj~ 通過包含 CRUD、Backlinks 與驗證攔截在內的 12 項斷言。
 
@@ -183,6 +183,6 @@ npx shadow-cljs watch app
 #+begin_src text
 http://localhost:8080
 #+end_src
-- 支援建立包含 ~[​[雙向連結]​]~ 的筆記。
+- 支援建立包含 ~[[雙向連結]]~ 的筆記。
 - 點選任一被引用的筆記，底部即刻顯示反向引用脈絡。
 - 點擊「載入修訂歷史」，即可拖曳時間軸穿越至任意歷史快照！
