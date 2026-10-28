@@ -2,27 +2,28 @@
 #+AUTHOR: Jack
 #+LANGUAGE: zh-TW
 #+OPTIONS: toc:2 num:t
+#+STARTUP: showall
 
 * 專案緣起與學習宣言 (Project Motivation)
 
-本專案的*唯一核心目的*是為了深入學習與掌握 *Clojure / ClojureScript 全端生態中最獨特、不可替代的關鍵思維與架構概念*：
-- *Data-Driven 設計哲學*（Code as Data, Data as Code）
+本專案的 *唯一核心目的* 是為了深入學習與掌握 *Clojure / ClojureScript 全端生態中最獨特、不可替代的關鍵思維與架構概念* ：
+- *Data-Driven 設計哲學* （Code as Data, Data as Code）
 - *Datalog 宣告式圖查詢* 與 EAVT 三元組事實模型
-- *Append-Only 不可變資料庫哲學*（時間旅行快照）
+- *Append-Only 不可變資料庫哲學* （時間旅行快照）
 - *re-frame 單向資料流* 與純函數狀態機
-- *Hiccup 純向量資料視圖*（杜絕 JSX 與 Hooks 閉包地獄）
+- *Hiccup 純向量資料視圖* （杜絕 JSX 與 Hooks 閉包地獄）
 
-選題與技術選型的所有決策，均以「*能否最大化展現 Clojure 與主流技術（TS / React / SQL）的根本差異*」為最高準則。
+選題與技術選型的所有決策，均以「 *能否最大化展現 Clojure 與主流技術 (TS / React / SQL) 的根本差異* 」為最高準則。
 
 * 核心架構與概念對照表 (Paradigm Comparison)
 
 | 專案模組 | 實作功能 | Clojure 核心概念 | 與主流技術 (TS / React / SQL) 的本質差異 |
 |----------+----------+------------------+------------------------------------------|
-| *資料庫* | 雙向引用 (=Wiki Link=) | *Datalog 宣告式圖查詢* 與 *EAVT 模型* | 不需 Join Table 或遞迴 CTE，純邏輯模式匹配直接遍歷圖拓撲。 |
-| *持久化* | 時光機 (=Time-Travel=) | *Append-Only 不可變資料庫* | 歷史永不覆蓋，=(d/as-of db time)= 零拷貝瞬切任意歷史快照。 |
+| *資料庫* | 雙向引用 (~[[Wiki Links]]~) | *Datalog 宣告式圖查詢* 與 *EAVT 模型* | 不需 Join Table 或遞迴 CTE，純邏輯模式匹配直接遍歷圖拓撲。 |
+| *持久化* | 時光機 (~Time-Travel~) | *Append-Only 不可變資料庫* | 歷史永不覆蓋， ~(d/as-of db time)~ 零拷貝瞬切任意歷史快照。 |
 | *後端路由* | REST API 與參數驗證 | *Data-Driven 路由 (Reitit)* + *Malli* | 路由與資料規格皆為純 Vector/Map 資料結構，前後端共用、可編譯運算。 |
-| *前端狀態* | 編輯器與關聯即時響應 | *re-frame 單向資料流* | 狀態 100% 集中於不可變 =app-db=，徹底杜絕 React Hooks 閉包與依賴地獄。 |
-| *前端視圖* | 筆記與關聯卡片渲染 | *Hiccup 純資料 UI (Reagent)* | 不需 JSX 轉譯，用純 Vector 與標準高階函數 (=map=, =filter=) 操作畫面。 |
+| *前端狀態* | 編輯器與關聯即時響應 | *re-frame 單向資料流* | 狀態 100% 集中於不可變 ~app-db~ ，徹底杜絕 React Hooks 閉包與依賴地獄。 |
+| *前端視圖* | 筆記與關聯卡片渲染 | *Hiccup 純資料 UI (Reagent)* | 不需 JSX 轉譯，用純 Vector 與標準高階函數 (~map~ , ~filter~) 操作畫面。 |
 
 * 系統端到端架構圖 (Architecture)
 
@@ -57,13 +58,13 @@
 * 五大里程碑實施歷程 (Milestones)
 
 ** Milestone 1: 專案基礎骨架與編譯管線
-- *環境建置*：撰寫 =shell.nix=，整合 OpenJDK 21、Clojure CLI 1.12、Node.js 24、rlwrap、neil。
-- *單一事實來源*：使用 =deps.edn= 統一宣告前後端套件；=shadow-cljs.edn= 啟用 ={:deps true}=。
-- *React 19 與 Reagent 2.0.1 掛載*：React 19 廢棄 =ReactDOM.render=，改用 =reagent.dom.client/create-root= 搭配 =defonce root-atom= 快取實例，確保 Shadow-CLJS 熱重載不衝突。
+- *環境建置* ：撰寫 ~shell.nix~ ，整合 OpenJDK 21、Clojure CLI 1.12、Node.js 24、rlwrap、neil。
+- *單一事實來源* ：使用 ~deps.edn~ 統一宣告前後端套件； ~shadow-cljs.edn~ 啟用 ~{:deps true}~ 。
+- *React 19 與 Reagent 2.0.1 掛載* ：React 19 廢棄 ~ReactDOM.render~ ，改用 ~reagent.dom.client/create-root~ 搭配 ~defonce root-atom~ 快取實例，確保 Shadow-CLJS 熱重載不衝突。
 
 ** Milestone 2: Datahike 資料核心、Datalog 圖查詢與時光機
-- *EAVT Schema*：定義 =:note/id= (UUID)、=:note/title= (唯一錨點)、=:note/links= (=:db.type/ref=, =:db.cardinality/many=)。
-- *Datalog 反向查詢*：
+- *EAVT Schema* ：定義 ~:note/id~ (UUID)、 ~:note/title~ (唯一錨點)、 ~:note/links~ (~:db.type/ref~ , ~:db.cardinality/many~)。
+- *Datalog 反向查詢* ：
   #+begin_src clojure
   (defn find-backlinks [db target-title]
     (d/q '[:find ?source-title ?source-id ?content
@@ -76,23 +77,23 @@
            [?source :note/content ?content]]
          db target-title))
   #+end_src
-- *時光機快照*：實作 =(d/as-of conn past-time)= 取得任意時間點的不可變資料庫實例。
-- *TDD 測試覆蓋*：建立 =test/pkm/backend/db_test.clj=，全數斷言通過。
+- *時光機快照* ：實作 ~(d/as-of conn past-time)~ 取得任意時間點的不可變資料庫實例。
+- *TDD 測試覆蓋* ：建立 ~test/pkm/backend/db_test.clj~ ，全數斷言通過。
 
 ** Milestone 3: Malli 規格、Wiki 解析器、業務層與 Reitit 路由
-- *前後端共用規格*：建立 =src/common/pkm/schema.cljc=，宣告 =NotePayload= 與字串長度約束。
-- *Wiki Links 解析與佔位筆記 (Stub Notes)*：
-  在使用者寫入尚未建立的 =[[目標筆記]]= 時，自動偵測並預先建立空內文的佔位實體，防止圖資料庫孤島引用報錯。
-- *Data-Driven 路由*：使用 Reitit 宣告純資料結構路由表，引入 =coercion/coerce-exceptions-middleware= 自動攔截規格異常並回傳 HTTP 400。
-- *API 整合測試*：=test/pkm/backend/routes_test.clj= 通過包含 CRUD、Backlinks 與驗證攔截在內的 12 項斷言。
+- *前後端共用規格* ：建立 ~src/common/pkm/schema.cljc~ ，宣告 ~NotePayload~ 與字串長度約束。
+- *Wiki Links 解析與佔位筆記 (Stub Notes)* ：
+  在使用者寫入尚未建立的 ~[​[目標筆記]​]~ 時，自動偵測並預先建立空內文的佔位實體，防止圖資料庫孤島引用報錯。
+- *Data-Driven 路由* ：使用 Reitit 宣告純資料結構路由表，引入 ~coercion/coerce-exceptions-middleware~ 自動攔截規格異常並回傳 HTTP 400。
+- *API 整合測試* ： ~test/pkm/backend/routes_test.clj~ 通過包含 CRUD、Backlinks 與驗證攔截在內的 12 項斷言。
 
 ** Milestone 4: 前端 Re-frame 單向資料流與雙向反向連結 UI
-- *純資料狀態樹*：=app-db= 統整全庫清單、當前筆記、編輯表單與非同步載入旗標。
-- *Subscriptions & Events*：實作非同步 API 請求（=cljs-http= + =core.async= go block）。
-- *Hiccup UI*：建立三欄式介面（左側側邊欄、中央編輯器、底部 Backlinks 反向連結即時卡片）。
+- *純資料狀態樹* ： ~app-db~ 統整全庫清單、當前筆記、編輯表單與非同步載入旗標。
+- *Subscriptions & Events* ：實作非同步 API 請求（ ~cljs-http~ + ~core.async~ go block）。
+- *Hiccup UI* ：建立三欄式介面（左側側邊欄、中央編輯器、底部 Backlinks 反向連結即時卡片）。
 
 ** Milestone 5: 時光機滑桿與歷史穿越閉環
-- *交易歷史提取*：利用 =(d/history db)= 與 5-tuple datom 模式匹配，萃取筆記歷次修訂版本的時間戳清單：
+- *交易歷史提取* ：利用 ~(d/history db)~ 與 5-tuple datom 模式匹配，萃取筆記歷次修訂版本的時間戳清單：
   #+begin_src clojure
   (d/q '[:find ?tx-time ?content
          :in $ ?title
@@ -102,25 +103,25 @@
          [?tx :db/txInstant ?tx-time]]
        (d/history db) title)
   #+end_src
-- *前端時光機面板*：點擊歷史快照按鈕，向後端請求 =(d/as-of)= 快照，前端狀態機同步置換編輯器文字與當時的反向關聯拓撲，並進入唯讀鎖定狀態；點擊「返回現在」即可瞬間跳回最新即時狀態。
+- *前端時光機面板* ：點擊歷史快照按鈕，向後端請求 ~(d/as-of)~ 快照，前端狀態機同步置換編輯器文字與當時的反向關聯拓撲，並進入唯讀鎖定狀態；點擊「返回現在」即可瞬間跳回最新即時狀態。
 
 * 開發實戰踩坑與關鍵洞見 (Key Learnings & Gotchas)
 
 1. *Datahike 配置細節*
-   - =:store :id= 必須為 UUID 字面值（如 =#uuid "..."=），傳入字串會造成 konserve 驗證掛起。
-   - =:backend= 關鍵字必須為 =:memory=，寫成 =:mem= 會噴出 =Unsupported store backend=。
-   - Schema 定義必須為點號 =:db.cardinality/many=，不可誤打成斜線 =/=。
+   - ~:store :id~ 必須為 UUID 字面值（如 ~#uuid "..."~ ），傳入字串會造成 konserve 驗證掛起。
+   - ~:backend~ 關鍵字必須為 ~:memory~ ，寫成 ~:mem~ 會噴出 ~Unsupported store backend~ 。
+   - Schema 定義必須為點號 ~:db.cardinality/many~ ，不可誤打成斜線 ~/~ 。
 2. *圖關聯中的孤島引用 (Dangling Links)*
-   - 當筆記引用了尚未建立的筆記時，Datahike 的 Lookup Ref =[:note/title "..."]= 會因找不到實體而拋出 =Nothing found for entity id= 例外。
-   - 解法：在主筆記交易前呼叫 =ensure-stub-notes!=，為缺少的目標標題先行配發 UUID 與佔位實體。
+   - 當筆記引用了尚未建立的筆記時，Datahike 的 Lookup Ref ~[:note/title "..."]~ 會因找不到實體而拋出 ~Nothing found for entity id~ 例外。
+   - 解法：在主筆記交易前呼叫 ~ensure-stub-notes!~ ，為缺少的目標標題先行配發 UUID 與佔位實體。
 3. *Ring / Muuntaja 序列化串流*
-   - Muuntaja 為了網路傳輸極致效能，Response =:body= 為 =ByteArrayInputStream= 而非單純字串。
-   - 在測試與解析時需使用 =cheshire.core/parse-stream (clojure.java.io/reader body) true= 讀取。
+   - Muuntaja 為了網路傳輸極致效能，Response ~:body~ 為 ~ByteArrayInputStream~ 而非單純字串。
+   - 在測試與解析時需使用 ~cheshire.core/parse-stream (clojure.java.io/reader body) true~ 讀取。
 4. *Reitit Coercion 例外中介層*
-   - 僅加入 =coerce-request-middleware= 在驗證失敗時會拋出 unhandled ex-info。
-   - 必須掛載 =coercion/coerce-exceptions-middleware=，才能自動轉換為標準 HTTP 400 Bad Request。
+   - 僅加入 ~coerce-request-middleware~ 在驗證失敗時會拋出 unhandled ex-info。
+   - 必須掛載 ~coercion/coerce-exceptions-middleware~ ，才能自動轉換為標準 HTTP 400 Bad Request。
 5. *Re-frame 命名空間 Key 匹配*
-   - Clojure 的 Namespaced Keyword（如 =:note/backlinks= 與 =:notes/backlinks=）是嚴格不相等的。訂閱與事件傳遞必須嚴格保持一致。
+   - Clojure 的 Namespaced Keyword（如 ~:note/backlinks~ 與 ~:notes/backlinks~ ）是嚴格不相等的。訂閱與事件傳遞必須嚴格保持一致。
 
 * 專案目錄結構 (Project Tree)
 
@@ -162,26 +163,26 @@ clojure-pkm/
 #+begin_src bash
 clj -M:test
 #+end_src
-預期輸出：=Ran 3 tests containing 12 assertions. 0 failures, 0 errors.=
+預期輸出： ~Ran 3 tests containing 12 assertions. 0 failures, 0 errors.~
 
 ** 2. 啟動後端伺服器 (埠號 3000)
 #+begin_src bash
 clj -M -m pkm.backend.server
 #+end_src
-預期輸出：=🚀 PKM Server 啟動於 http://localhost:3000=
+預期輸出： ~🚀 PKM Server 啟動於 http://localhost:3000~
 
 ** 3. 啟動前端開發熱重載 (埠號 8080)
 開立第二個終端機分頁：
 #+begin_src bash
 npx shadow-cljs watch app
 #+end_src
-等待顯示 =[:app] Build completed=。
+等待顯示 ~[:app] Build completed~ 。
 
 ** 4. 開啟應用程式
 打開瀏覽器訪問：
 #+begin_src text
 http://localhost:8080
 #+end_src
-- 支援建立包含 =[[雙向連結]]= 的筆記。
+- 支援建立包含 ~[​[雙向連結]​]~ 的筆記。
 - 點選任一被引用的筆記，底部即刻顯示反向引用脈絡。
 - 點擊「載入修訂歷史」，即可拖曳時間軸穿越至任意歷史快照！
