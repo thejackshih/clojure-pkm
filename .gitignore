@@ -1,0 +1,34 @@
+# Datahike Local Storage
+.datahike-db/
+
+# Clojure & JVM Build Caches
+.cpcache/
+target/
+.nrepl-port
+.shadow-cljs/
+
+# Frontend Build & Dependencies
+node_modules/
+resources/public/js/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Tooling, Linters & Language Servers
+.clj-kondo/.cache/
+.lsp/
+.calva/
+
+# Nix & Direnv
+result
+result-*
+.direnv/
+
+# OS & Editors
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+*~
+.idea/
+.vscode/
